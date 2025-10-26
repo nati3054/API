@@ -1,9 +1,9 @@
 // form.js - versão comentada linha-a-linha para uso em aula
-// Objetivo: permitir criar (POST) e editar (PUT) produtos usando a API
+// Objetivo: permitir criar (POST) e editar (PUT) alunos usando a API
 
 // ----- Configuração -----
 // URL base da API
-const API = 'https://proweb.leoproti.com.br/produtos';
+const API = 'https://proweb.leoproti.com.br/alunos';
 // Atalho para query selector
 // Aqui declaramos uma função curta chamada "$" para facilitar selecionar elementos no DOM.
 // Explicação do parâmetro 's':
@@ -16,10 +16,12 @@ const API = 'https://proweb.leoproti.com.br/produtos';
 const $ = s => document.querySelector(s);
 
 // ----- Referências aos campos do formulário -----
-const idField = $('#produto-id');    // campo escondido com o id (se editar)
+const idField = $('#alunos-id');    // campo escondido com o id (se editar)
 const nomeField = $('#nome');        // input nome
-const precoField = $('#preco');      // input preço
-const form = $('#produto-form');     // elemento <form>
+const turmaField = $('#turma');      // input preço
+const cursoField = $('#curso');      // input preço
+const matriculaField = $('#matricula');  // input preço
+const form = $('#alunos-form');     // elemento <form>
 const message = $('#message');       // área de mensagens (feedback)
 
 // ----- Função para mostrar mensagens (temporárias) -----
@@ -61,18 +63,20 @@ async function callApi(path = '', opts = {}){
 // Quando o usuário acessa form.html?id=123, esta função puxa os dados
 async function carregar(id){
   try{
-    const r = await callApi('/' + id); // GET /produtos/{id}
+    const r = await callApi('/' + id); // GET /alunos/{id}
     if(r.ok && r.data){
       // Preenche campos com os dados retornados
       idField.value = r.data.id;
       nomeField.value = r.data.nome;
-      precoField.value = r.data.preco;
+      turmaField.value = r.data.turma;
+      cursoField.value = r.data.curso;
+      matriculaField.value = r.data.matricula;
       // Altera o título do formulário para indicar edição
-      const title = document.getElementById('form-title'); if(title) title.textContent = 'Editar Produto';
-    } else showMessage('Produto não encontrado','error');
+      const title = document.getElementById('form-title'); if(title) title.textContent = 'Editar Alunos';
+    } else showMessage('Alunos não encontrado','error');
   }catch(e){
     // Em caso de erro de rede/CORS, mostra mensagem e loga no console
-    showMessage('Erro ao carregar produto','error');
+    showMessage('Erro ao carregar alunos','error');
     console.error(e);
   }
 }
@@ -81,23 +85,24 @@ async function carregar(id){
 async function salvar(e){
   e.preventDefault(); // previne envio padrão do form
   // Monta o objeto produto a partir dos campos
-  const produto = { nome: nomeField.value.trim(), preco: Number(precoField.value) };
+  const aluno = {nome: nomeField.value.trim(),turma: turmaField.value.trim(),curso: cursoField.value.trim(),matricula: matriculaField.value.trim()};
   // Validação simples: nome não vazio e preço numérico
-  if(!produto.nome || Number.isNaN(produto.preco)){ showMessage('Preencha nome e preço válidos','error'); return; }
+  if (!aluno.nome || !aluno.turma || !aluno.curso || !aluno.matricula) {showMessage('Preencha todos os campos corretamente', 'error');
+    return;}
   try{
     if(idField.value){
-      // Modo edição: chama PUT /produtos/{id}
-      const r = await callApi('/' + idField.value, { method: 'PUT', body: JSON.stringify(produto) });
+      // Modo edição: chama PUT /alunos/{id}
+      const r = await callApi('/' + idField.value, { method: 'PUT', body: JSON.stringify(aluno) });
       if(r.ok) {
-        showMessage('Produto atualizado','success');
+        showMessage('Aluno atualizado','success');
         // Redireciona de volta para a lista após 700ms
         setTimeout(()=> location.href = 'index.html', 700);
       } else showMessage('Erro ao atualizar','error');
     } else {
-      // Modo criação: POST /produtos
-      const r = await callApi('', { method: 'POST', body: JSON.stringify(produto) });
+      // Modo criação: POST /alunos
+      const r = await callApi('', { method: 'POST', body: JSON.stringify(aluno) });
       if(r.ok) {
-        showMessage('Produto criado','success');
+        showMessage('Aluno criado','success');
         setTimeout(()=> location.href = 'index.html', 700);
       } else showMessage('Erro ao criar','error');
     }

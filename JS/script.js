@@ -3,7 +3,7 @@
 // Objetivo: listar produtos da API e permitir exclusão usando Fetch
 
 // URL base da API (mudar se for necessário)
-const API = 'https://proweb.leoproti.com.br/produtos';
+const API = 'https://proweb.leoproti.com.br/alunos';
 
 // ----- Seletores rápidos (atalhos para o DOM) -----
 // $('seletor') -> retorna o primeiro elemento que casa com o seletor
@@ -13,7 +13,7 @@ const $$ = s => document.querySelectorAll(s);
 
 // ----- Elementos usados na página -----
 // tbody da tabela onde os produtos serão inseridos
-const tbody = $('#produtos-table tbody');
+const tbody = $('#alunos-table tbody');
 // div que mostra o estado de carregamento
 const loading = $('#loading');
 // div usada para mostrar mensagens ao usuário
@@ -57,21 +57,21 @@ async function callApi(path = '', opts = {}) {
 }
 
 // ----- Carregar dados -----
-// Busca os produtos e chama 'renderizar' para mostrar na tabela
-async function carregarProdutos() {
+// Busca os alunos e chama 'renderizar' para mostrar na tabela
+async function carregarAlunos() {
     // Mostra indicador de carregamento
     setLoading(true);
     try {
-        // Chama a API na raiz (GET /produtos)
+        // Chama a API na raiz (GET /alunos)
         const r = await callApi('');
-        // Se a resposta for OK e vier um array, renderiza os produtos
+        // Se a resposta for OK e vier um array, renderiza os alunos
         if (r.ok && Array.isArray(r.data)) renderizar(r.data);
         else renderizar([]); // caso contrário, renderiza tabela vazia
     } catch (e) {
         // Se houver erro de rede (ex.: CORS ou API off), usamos dados de exemplo
         renderizar([
-            { id: 1, nome: 'Notebook (exemplo)', preco: 2500 },
-            { id: 2, nome: 'Mouse (exemplo)', preco: 89.9 }
+            { id: 1, nome: 'Arthur Gabriel', turma: 'A1', curso: 'Engenharia', matricula: '12345' },
+            { id: 2, nome: 'Vinicius Ferreira', turma: 'B2', curso: 'Design', matricula: '67890' }
         ]);
         // Mostra mensagem informando que estamos em modo offline
         showMessage('Modo offline: usando dados de exemplo', 'error');
@@ -83,26 +83,28 @@ async function carregarProdutos() {
 
 // ----- Renderizar tabela -----
 // Recebe um array de produtos e popula o tbody
-function renderizar(produtos) {
+function renderizar(alunos) {
     // Limpa o conteúdo atual
     tbody.innerHTML = '';
     // Se não houver produtos, mostra uma linha informando isso
-    if (!produtos || produtos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Nenhum produto</td></tr>';
+    if (!alunos || alunos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Nenhum Aluno</td></tr>';
         return; // sai da função
     }
 
     // Para cada produto, cria uma linha na tabela
-    produtos.forEach(p => {
+    alunos.forEach(a => {
         const tr = document.createElement('tr'); // cria <tr>
         // Preenche a linha usando template string. Note que formatamos o preço.
         tr.innerHTML = `
-            <td>${p.id}</td>
-            <td>${p.nome}</td>
-            <td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td>
+            <td>${a.id}</td>
+            <td>${a.nome}</td>
+            <td>${a.turma}</td>
+            <td>${a.curso}</td>
+            <td>${a.matricula}</td>
             <td>
-                <a class="btn btn-sm btn-primary" href="form.html?id=${p.id}">Editar</a>
-                <button class="btn btn-sm btn-danger btn-delete" data-id="${p.id}" data-nome="${p.nome}">Excluir</button>
+                <a class="btn btn-sm btn-primary" href="form.html?id=${a.id}">Editar</a>
+                <button class="btn btn-sm btn-danger btn-delete" data-id="${a.id}" data-nome="${a.nome}" data-turma="${a.turma}" data-curso="${a.curso}" data-matricula="${a.matricula}"> Excluir</button>
             </td>`;
         // Anexa a linha ao tbody
         tbody.appendChild(tr);
@@ -113,22 +115,25 @@ function renderizar(produtos) {
         // Lê id e nome do dataset do botão
         const id = btn.dataset.id;
         const nome = btn.dataset.nome;
+        const turma = btn.dataset.turma;
+        const curso = btn.dataset.curso;
+        const matricula = btn.dataset.matricula;
         // Pergunta confirmação ao usuário antes de excluir
-        if (confirm(`Excluir "${nome}"?`)) excluirProduto(id);
+        if (confirm(`Excluir aluno(a):  "${nome}"  "${turma}"  "${curso}"  "${matricula}" ?`)) excluirAluno(id);
     }));
 }
 
 // ----- Excluir produto -----
 // Envia DELETE /produtos/{id} e recarrega a lista se sucesso
-async function excluirProduto(id) {
+async function excluirAluno(id) {
     setLoading(true); // mostra o spinner
     try {
         // Chama a API com método DELETE
         const r = await callApi('/' + id, { method: 'DELETE' });
         // Se OK, mostra mensagem e recarrega a lista
         if (r.ok) {
-            showMessage('Produto excluído', 'success');
-            carregarProdutos();
+            showMessage('Aluno excluído', 'success');
+            carregarAlunos();
         } else {
             // Caso a API retorne erro, mostra mensagem de erro
             showMessage('Erro ao excluir', 'error');
@@ -144,4 +149,4 @@ async function excluirProduto(id) {
 
 // ----- Inicialização -----
 // Quando o DOM estiver pronto, executa carregarProdutos()
-window.addEventListener('DOMContentLoaded', carregarProdutos);
+window.addEventListener('DOMContentLoaded', carregarAlunos);
