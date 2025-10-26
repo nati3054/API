@@ -1,18 +1,7 @@
-// form.js - versão comentada linha-a-linha para uso em aula
-// Objetivo: permitir criar (POST) e editar (PUT) alunos usando a API
 
 // ----- Configuração -----
 // URL base da API
 const API = 'https://proweb.leoproti.com.br/alunos';
-// Atalho para query selector
-// Aqui declaramos uma função curta chamada "$" para facilitar selecionar elementos no DOM.
-// Explicação do parâmetro 's':
-// - 's' é uma string que representa um seletor CSS, por exemplo:
-//     '#nome'      -> seleciona elemento com id="nome"
-//     '.classe'    -> seleciona primeiro elemento com a classe 'classe'
-//     'input[type="text"]' -> seleciona o primeiro input de texto
-// - A função retorna o PRIMEIRO elemento que casar com o seletor (comportamento de document.querySelector).
-// - Uso prático em aula: $('#nome') é muito mais curto que document.querySelector('#nome').
 const $ = s => document.querySelector(s);
 
 // ----- Referências aos campos do formulário -----
@@ -36,25 +25,14 @@ function showMessage(text, type = 'success'){
 }
 
 // ----- Função genérica para chamar a API -----
-// Faz uma requisição para API e retorna um objeto simples { ok, status, data }
-// - `ok`: boolean (res.ok)
-// - `status`: código HTTP
-// - `data`: resposta já parseada como JSON quando possível, ou texto cru
 async function callApi(path = '', opts = {}){
-  // Monta a URL final: base API + path (ex.: '/123')
-  // Usa fetch para fazer a requisição. Passamos `mode: 'cors'` para permitir chamadas cross-origin
-  // e um header Content-Type padrão. Qualquer opção adicional (method, body, etc.) pode ser passada via `opts`.
+  
   const res = await fetch(API + path, { mode: 'cors', headers: { 'Content-Type': 'application/json' }, ...opts });
-
-  // Lê o corpo da resposta como texto. Fizemos isso porque nem sempre a resposta tem corpo JSON
-  // (ex.: respostas 204 No Content). Ler como texto evita exceções ao chamar res.json() em corpos vazios.
   const txt = await res.text();
 
-  // Tenta converter o texto para JSON. Se der certo, retornamos `data` como objeto; se falhar, retornamos o texto.
   try {
     return { ok: res.ok, status: res.status, data: txt ? JSON.parse(txt) : null };
   } catch (e) {
-    // Se o parse falhar (não é JSON), retornamos o texto original para inspeção.
     return { ok: res.ok, status: res.status, data: txt };
   }
 }

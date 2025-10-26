@@ -2,29 +2,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-        <!--
-            Prática 06 - CRUD de Produtos
-            - index.html mostra a lista de produtos e ações (Novo, Editar, Excluir)
-            - O botão 'Novo Produto' abre form.html para criar um novo item
-            - A página carrega o script `js/script.simple.js` que:
-                    * Faz requisições GET para listar produtos
-                    * Exclui produtos via DELETE
-                    * Atualiza a tabela no DOM
-            - Para editar, a aplicação abre: form.html?id=<id>
-            Observação: Sirva esta pasta por HTTP (ex.: npx http-server . --cors) para evitar problemas de CORS no navegador.
-        -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alunos</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/index.css">
+    <link rel="stylesheet" href="./index.css">
 
 </head>
 <body class="bg-light">
-    <nav class="navbar bg-body-tertiary">
+    <nav class="navbar bg-body-tertiary designer">
         <div class="container-fluid">
-            <a class="navbar-brand">Sistemas De Alunos</a>
+            <a class="navbar-brand title">Sistemas De Alunos</a>
             <form class="d-flex" role="search" id="form">
                 <input id="campoBusca" class="form-control me-2" type="search" placeholder="Digite o nome..." aria-label="Search"/>
                 <button class="btn btn-outline-success" type="submit">Pesquisar</button>
@@ -44,20 +32,20 @@
                 <div id="message" style="display:none;" class="mb-3"></div>
 
                 <div class="card">
-                    <div class="card-body p-2">
+                    <div class="card-body p-1">
                         <div class="table-responsive">
-                            <table id="alunos-table" class="table table-sm table-hover mb-0">
+                            <table id="alunos-table" class="table table-sm table-hover mb-0 ">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Nome</th>
-                                        <th>Turma</th>
-                                        <th>Curso</th>
-                                        <th>Matricula</th>
-                                        <th>Ações</th>
+                                        <th class="text-center align-middle">ID</th>
+                                        <th class="text-center align-middle">Nome</th>
+                                        <th class="text-center align-middle">Turma</th>
+                                        <th class="text-center align-middle">Curso</th>
+                                        <th class="text-center align-middle">Matricula</th>
+                                        <th class="text-center align-middle">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center align-middle">
                                     <!-- alunos -->
                                 </tbody>
                             </table>
@@ -72,8 +60,8 @@
         <div class="container text-center text-muted">&copy; 2025 - Prática 06 - Programação Web - Newton Paiva</div>
     </footer>
 
-    <!-- Bootstrap 5 JS (Bundle incluir Popper) -->
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../JS/script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>

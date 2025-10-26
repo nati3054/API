@@ -1,0 +1,15 @@
+.title{
+    font-size: 35px;
+    font-style: bold;
+    font-weight: 500;
+}
+
+.designer{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

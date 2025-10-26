@@ -1,14 +1,9 @@
-// script.simple.js
-// Versão comentada linha-a-linha para uso em aula
-// Objetivo: listar produtos da API e permitir exclusão usando Fetch
 
 // URL base da API (mudar se for necessário)
 const API = 'https://proweb.leoproti.com.br/alunos';
 
-// ----- Seletores rápidos (atalhos para o DOM) -----
-// $('seletor') -> retorna o primeiro elemento que casa com o seletor
+
 const $ = s => document.querySelector(s);
-// $$('seletor') -> retorna NodeList com todos os elementos que casam
 const $$ = s => document.querySelectorAll(s);
 
 // ----- Elementos usados na página -----
