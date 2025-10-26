@@ -123,6 +123,28 @@ function renderizar(alunos) {
     }));
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('form');
+  const campoBusca = document.getElementById('campoBusca');
+  const tabela = document.getElementById('alunos-table').getElementsByTagName('tbody')[0];
+
+  // Evita o comportamento padrão do form (recarregar a página)
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = campoBusca.value.toLowerCase();
+
+    // Pega todas as linhas da tabela
+    const linhas = tabela.getElementsByTagName('tr');
+
+    for (let linha of linhas) {
+      const textoLinha = linha.textContent.toLowerCase();
+      // Mostra ou esconde conforme o termo digitado
+      linha.style.display = textoLinha.includes(nome) ? '' : 'none';
+    }
+  });
+});
+
+
 // ----- Excluir produto -----
 // Envia DELETE /produtos/{id} e recarrega a lista se sucesso
 async function excluirAluno(id) {
